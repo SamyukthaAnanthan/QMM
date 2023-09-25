@@ -1,0 +1,58 @@
+---
+title: "QMM ASSIGNMENT"
+output:
+  pdf_document: default
+  html_document: default
+  word_document: default
+---
+***
+```{r}
+#solving lp model using r
+library(lpSolve)
+```
+
+```{r}
+# Objective coefficients (profit per unit)
+f.obj <- c(420, 360, 300, 420, 360, 300, 420, 360, 300)
+```
+
+```{r}
+# Columns correspond to sizes at each plant
+f.con <- matrix(c(
+  1, 1, 1, 0, 0, 0, 0, 0, 0,  # Plant 1 capacity
+  0, 0, 0, 1, 1, 1, 0, 0, 0,  # Plant 2 capacity
+  0, 0, 0, 0, 0, 0, 1, 1, 1,  # Plant 3 capacity
+  20, 15, 12, 0, 0, 0, 0, 0, 0,  # Plant 1 storage space
+  0, 0, 0, 20, 15, 12, 0, 0, 0,  # Plant 2 storage space
+  0, 0, 0, 0, 0, 0, 20, 15, 12,  # Plant 3 storage space
+  1, 0, 0, 1, 0, 0, 1, 0, 0,  # Sales forecasts for Large
+  0, 1, 0, 0, 1, 0, 0, 1, 0,  # Sales forecasts for Medium
+  0, 0, 1, 0, 0, 1, 0, 0, 1  # Sales forecasts for Small
+), nrow = 9, byrow = TRUE)
+f.con
+```
+
+```{r}
+# Right-hand side of constraints
+f.rhs <- c(750, 900, 450, 13000, 12000, 5000, 900, 1200, 750)
+```
+
+```{r}
+# Define the direction of inequalities (less than or equal)
+f.dir <- c("<=", "<=", "<=", "<=", "<=", "<=", "<=", "<=", "<=")
+```
+
+```{r}
+# Solve the LP problem
+f.sol = lp("max", f.obj,f.con,f.dir,f.rhs)
+f.sol$solution
+```
+
+```{r}
+#The optimal profit
+f.sol$objval 
+```
+
+
+
+
